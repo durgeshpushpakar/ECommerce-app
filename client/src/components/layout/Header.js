@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
-const Layout = () => {
+const Header = () => {
   return (
     <div>
       <h1>Header comp</h1>
     </div>
   )
-}
+};
 
-export default Layout
+export default Header;
