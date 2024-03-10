@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import "../../styles/AuthStyles.css"
 
-
 const Register = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -14,7 +13,6 @@ const Register = () => {
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
     const navigate = useNavigate()
-
     // form function handle submit event
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,7 +33,6 @@ const Register = () => {
             toast.error("Something went wrong");
         }
     }
-
     return (
         <Layout title="Register - Ecommer App">
             <div className="form-container ">
