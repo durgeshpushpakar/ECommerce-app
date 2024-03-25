@@ -5,7 +5,7 @@ import userModel from "../models/userModel.js";
 // register controller
 export const registerController = async (req, res) => {
     try {
-        const { name, email, password, phone, address } = req.body;
+        const { name, email, password, phone, address, answer } = req.body;
         // validations
         if (!name) {
             return res.status(400).send({ message: 'Name is required' });
@@ -22,6 +22,9 @@ export const registerController = async (req, res) => {
         if (!address) {
             return res.status(400).send({ message: 'address is required' });
         }
+        if (!answer) {
+            return res.status(400).send({ message: 'answer is required' });
+        }
 
         //existing user
         const existingUser = await userModel.findOne({ email });
@@ -33,7 +36,7 @@ export const registerController = async (req, res) => {
         }
         // register User
         const hashedPassword = await hashPassword(password);
-        const user = await new userModel({ name, email, password: hashedPassword, phone, address }).save();
+        const user = await new userModel({ name, email, password: hashedPassword, phone, address, answer }).save();
 
         return res.status(201).send({
             success: true,
@@ -106,9 +109,42 @@ export const loginController = async (req, res) => {
 // forgotPasswordController
 export const forgotPasswordController = async (req, res) => {
     try {
+        const { email, answer, newPassword } = req.body;
+        if (!email) {
+            res.status(400).send({ message: "Email is required" })
+        }
+        if (!answer) {
+            res.status(400).send({ message: "Answer is required" })
+        }
+        if (!newPassword) {
+            res.status(400).send({ message: "New password is required" })
+        }
+        const existingUser = await userModel.findOne({ email, answer });
+        if (!existingUser) {
+            res.status(404).send({
+                success: false,
+                message: "Incorrect email or answer"
+            });
+        }
+        if (answer === existingUser.answer) {
+            const newHashedPassword = await hashPassword(newPassword);
+            const updatedUser = await userModel.findByIdAndUpdate(existingUser._id, { password: newHashedPassword });
+            res.status(200).send({
+                success: true,
+                message: 'password changed successfully'
+            })
+        }
+        else {
+            res.status(404).send({ message: "Incorrect email or answer" });
+        }
 
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Something went wrong",
+            error
+        })
     }
 }
 
