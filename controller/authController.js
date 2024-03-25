@@ -103,6 +103,16 @@ export const loginController = async (req, res) => {
     }
 };
 
+// forgotPasswordController
+export const forgotPasswordController = async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 // test controller
 export const testController = async (req, res, next) => {
     res.send(`Hello from test controller, I am a protected route!`);
